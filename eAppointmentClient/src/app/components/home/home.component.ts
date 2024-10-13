@@ -21,6 +21,7 @@ declare const $:any;
   styleUrl: './home.component.css',
   providers:[DatePipe]
 })
+
 export class HomeComponent {
   departments = departments;
   doctors: DoctorModel[] = [];
@@ -106,5 +107,35 @@ export class HomeComponent {
         this.getAllAppointment();
       })
     }
+  }
+
+  onAppointmentDeleting(e:any){
+    e.cancel=true
+
+    this.swal.callSwall("Delete Appointment!",`Do you want to delete ${e.appointmentData.patient.fullName}'s appointment? `,()=>{
+      this.http.post<string>("Appointment/DeleteById",{id:e.appointmentData.id},res=>{
+        this.swal.callToast(res.data);
+        this.getAllAppointment();
+      })
+    });
+  }
+
+  onAppointmentDeleted(e:any){
+    e.cancel=true
+  }
+
+  onAppointmentUpdating(e:any){
+    e.cancel = true;
+
+    const data = {
+      id: e.oldData.id,
+      startDate:this.date.transform(e.newData.startDate,"dd.MM.yyyy HH:mm"),
+      endDate:this.date.transform(e.newData.endDate,"dd.MM.yyyy HH:mm")
+    };
+
+    this.http.post<string>("Appointment/Update",data,res=>{
+      this.swal.callToast(res.data,"success");
+      this.getAllAppointment();
+    });
   }
 }

@@ -45,6 +45,9 @@
             [endDayHour]="18"
             [showAllDayPanel]="false"
             (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
+            (onAppointmentDeleted)="onAppointmentDeleted($event)"
+            (onAppointmentDeleting)="onAppointmentDeleting($event)"
+            (onAppointmentUpdating)="onAppointmentUpdating($event)"
             >
             </dx-scheduler>
         }
@@ -77,32 +80,32 @@
 
                 <div class="form-group mt-2">
                     <label for="firstName">First Name</label>
-                    <input type="text" name="firstName" [(ngModel)]="createModel.firstName" class="form-control" required minlength="3" [disabled]="createModel.patientId != null">
+                    <input type="text" name="firstName" [(ngModel)]="createModel.firstName" class="form-control" required minlength="3" [disabled]="createModel.patientId !== null">
                     <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="form-group mt-2">
                     <label for="lastName">Last Name</label>
                     <input type="text" name="lastName" [(ngModel)]="createModel.lastName" class="form-control" required minlength="3"
-                    [disabled]="createModel.patientId != null">
+                    [disabled]="createModel.patientId !== null">
                     <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="form-group mt-2">
                     <label for="city">City</label>
-                    <input type="text" name="city" [(ngModel)]="createModel.city" class="form-control" required minlength="3" [disabled]="createModel.patientId != null">
+                    <input type="text" name="city" [(ngModel)]="createModel.city" class="form-control" required minlength="3" [disabled]="createModel.patientId !== null">
                     <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="form-group mt-2">
                     <label for="town">Town</label>
-                    <input type="text" name="town" [(ngModel)]="createModel.town" class="form-control" required minlength="3" [disabled]="createModel.patientId != null">
+                    <input type="text" name="town" [(ngModel)]="createModel.town" class="form-control" required minlength="3" [disabled]="createModel.patientId !== null">
                     <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="form-group mt-2">
                     <label for="fullAdress">Full Address</label>
-                    <textarea name="fullAdress" [(ngModel)]="createModel.fullAddress" class="form-control" required minlength="3" [disabled]="createModel.patientId != null"></textarea>
+                    <textarea name="fullAdress" [(ngModel)]="createModel.fullAddress" class="form-control" required minlength="3" [disabled]="createModel.patientId !== null"></textarea>
                     <div class="invalid-feedback"></div>
                 </div>
 
