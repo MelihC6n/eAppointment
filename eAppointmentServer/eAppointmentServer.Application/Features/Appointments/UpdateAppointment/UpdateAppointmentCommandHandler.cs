@@ -12,14 +12,33 @@ internal sealed class UpdateAppointmentCommandHandler(
 {
     public async Task<Result<string>> Handle(UpdateAppointmentCommand request, CancellationToken cancellationToken)
     {
+        DateTime startDate = Convert.ToDateTime(request.StartDate);
+        DateTime endDate = Convert.ToDateTime(request.EndDate);
+
         Appointment? appointment = await appointmentRepository.GetByExpressionWithTrackingAsync(a => a.Id == request.Id);
+
         if (appointment == null)
         {
             return Result<string>.Failure("Appointment is not found!");
         }
 
-        appointment.StartDate = Convert.ToDateTime(request.StartDate);
-        appointment.EndDate = Convert.ToDateTime(request.EndDate);
+        bool isAppointmentDateNotAvaliable =
+            await appointmentRepository
+            .AnyAsync(p =>
+            (p.DoctorId == appointment.DoctorId
+            && ((p.StartDate < endDate && p.StartDate >= startDate)//Mevcut randevunun bitişi, diğer randevunun başlangıcıyla çakışıyor
+            || (p.EndDate > startDate && p.EndDate <= endDate)//Mevcut randevunun başlangıcı, diğer randevunun bitişiyle çakışıyor
+            || (p.StartDate >= startDate && p.StartDate <= startDate)//Mevcut randevu, diğer randevunun içerisinde kalıyor.
+            || (p.StartDate <= startDate && p.EndDate >= endDate)))//Mevcut randevu, diğer randevuyu kapsıyor.
+            && p.Id != appointment.Id, cancellationToken);//Mevcut randevu kendisini saymaması için.
+
+        if (isAppointmentDateNotAvaliable)
+        {
+            return Result<string>.Failure("Appointment date is not avaliable!");
+        }
+
+        appointment.StartDate = startDate;
+        appointment.EndDate = endDate;
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
