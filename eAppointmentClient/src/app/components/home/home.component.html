@@ -43,8 +43,76 @@
             [currentView]="'week'"
             [startDayHour]="9"
             [endDayHour]="18"
-            [showAllDayPanel]="false">
+            [showAllDayPanel]="false"
+            (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
+            >
             </dx-scheduler>
         }
     </div>
 </div>
+
+
+
+<div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5">Create Appointment Form</h1>
+          <button type="button" #addModelCloseBtn class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <form #addForm="ngForm" formValidate [autoValidateMessage]="true" autocomplete="off" (ngSubmit)="create(addForm)">
+
+            <div class="modal-body">
+
+                <div class="form-group text-center mt-2">
+                    <span class="alert alert-primary">{{createModel.startDate}} - {{createModel.endDate}}</span>
+                </div>
+
+                <div class="form-group mt-4">
+                    <label for="identityNumber">Identity Number</label>
+                    <input type="text" name="identityNumber" [(ngModel)]="createModel.identityNumber" class="form-control" required minlength="11" maxlength="11" pattern="^[1-9][0-9]{9}[02468]$" (change)="getPatient()">
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group mt-2">
+                    <label for="firstName">First Name</label>
+                    <input type="text" name="firstName" [(ngModel)]="createModel.firstName" class="form-control" required minlength="3" [disabled]="createModel.patientId != null">
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group mt-2">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" name="lastName" [(ngModel)]="createModel.lastName" class="form-control" required minlength="3"
+                    [disabled]="createModel.patientId != null">
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group mt-2">
+                    <label for="city">City</label>
+                    <input type="text" name="city" [(ngModel)]="createModel.city" class="form-control" required minlength="3" [disabled]="createModel.patientId != null">
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group mt-2">
+                    <label for="town">Town</label>
+                    <input type="text" name="town" [(ngModel)]="createModel.town" class="form-control" required minlength="3" [disabled]="createModel.patientId != null">
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group mt-2">
+                    <label for="fullAdress">Full Address</label>
+                    <textarea name="fullAdress" [(ngModel)]="createModel.fullAddress" class="form-control" required minlength="3" [disabled]="createModel.patientId != null"></textarea>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+               <button type="submit" class="btn btn-dark w-100">Create</button>
+            </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>

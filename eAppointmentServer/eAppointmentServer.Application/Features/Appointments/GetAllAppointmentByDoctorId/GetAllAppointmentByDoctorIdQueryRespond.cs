@@ -6,5 +6,5 @@ public sealed record GetAllAppointmentByDoctorIdQueryRespond(
     Guid Id,
     DateTime StartDate,
     DateTime EndDate,
-    string Title,
+    string Text,
     Patient Patient);
