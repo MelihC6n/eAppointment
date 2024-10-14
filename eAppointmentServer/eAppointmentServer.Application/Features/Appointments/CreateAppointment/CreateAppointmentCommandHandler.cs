@@ -16,7 +16,7 @@ internal sealed class CreateAppointmentCommandHandler(
         DateTime startDate = Convert.ToDateTime(request.StartDate);
         DateTime endDate = Convert.ToDateTime(request.EndDate);
 
-        bool isAppointmentDateNotAvaliable =
+        bool isAppointmentDateNotAvailable =
             await appointmentRepository
             .AnyAsync(p =>
                 p.DoctorId == request.DoctorId
@@ -26,7 +26,7 @@ internal sealed class CreateAppointmentCommandHandler(
             || (p.StartDate <= startDate && p.EndDate >= endDate))//Mevcut randevu, diğer randevuyu kapsıyor.
             , cancellationToken);
 
-        if (isAppointmentDateNotAvaliable)
+        if (isAppointmentDateNotAvailable)
         {
             return Result<string>.Failure("Appointment date is not avaliable!");
         }

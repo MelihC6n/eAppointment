@@ -22,17 +22,18 @@ internal sealed class UpdateAppointmentCommandHandler(
             return Result<string>.Failure("Appointment is not found!");
         }
 
-        bool isAppointmentDateNotAvaliable =
+        bool isAppointmentDateNotAvailable =
             await appointmentRepository
             .AnyAsync(p =>
-            (p.DoctorId == appointment.DoctorId
+               p.Id != appointment.Id //Mevcut randevunun kendisini saymaması için.
+            && p.DoctorId == appointment.DoctorId
             && ((p.StartDate < endDate && p.StartDate >= startDate)//Mevcut randevunun bitişi, diğer randevunun başlangıcıyla çakışıyor
             || (p.EndDate > startDate && p.EndDate <= endDate)//Mevcut randevunun başlangıcı, diğer randevunun bitişiyle çakışıyor
             || (p.StartDate >= startDate && p.StartDate <= startDate)//Mevcut randevu, diğer randevunun içerisinde kalıyor.
-            || (p.StartDate <= startDate && p.EndDate >= endDate)))//Mevcut randevu, diğer randevuyu kapsıyor.
-            && p.Id != appointment.Id, cancellationToken);//Mevcut randevu kendisini saymaması için.
+            || (p.StartDate <= startDate && p.EndDate >= endDate))//Mevcut randevu, diğer randevuyu kapsıyor.
+            , cancellationToken);
 
-        if (isAppointmentDateNotAvaliable)
+        if (isAppointmentDateNotAvailable)
         {
             return Result<string>.Failure("Appointment date is not avaliable!");
         }

@@ -35,6 +35,7 @@ public sealed class PatientController : ApiController
         return StatusCode(response.StatusCode, response);
     }
 
+    [HttpPost]
     public async Task<IActionResult> UpdateById(UpdatePatientCommand request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(request, cancellationToken);
