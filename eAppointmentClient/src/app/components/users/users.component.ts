@@ -36,17 +36,24 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAll();
+    this.getAllRoles();
   }
 
   getAll(){
-    this.http.post<UserModel[]>("Users/GetAll",{},(res)=>{
+    this.http.post<UserModel[]>("User/GetAll",{},(res)=>{
       this.users = res.data;
+    });
+  }
+
+  getAllRoles(){
+    this.http.post<RoleModel[]>("User/GetAllRoles",{},(res)=>{
+      this.roles = res.data;
     });
   }
 
   add(form:NgForm){
     if(form.valid){
-      this.http.post<string>("Users/Create",this.createModel,(res)=>{
+      this.http.post<string>("User/Create",this.createModel,(res)=>{
         this.toast.callToast(res.data,'success');
         this.getAll();
         this.addModelCloseBtn?.nativeElement.click();
@@ -57,7 +64,7 @@ export class UsersComponent implements OnInit {
 
   delete(id:string,fullName:string){
     this.toast.callSwall("Delete User",`Do you want to delete the user : ${fullName}`,()=>{
-      this.http.post<string>("Users/DeleteById",{id:id},(res)=>{
+      this.http.post<string>("User/Delete",{id:id},(res)=>{
         this.toast.callToast(res.data,"info");
         this.getAll();
       })
@@ -69,7 +76,7 @@ export class UsersComponent implements OnInit {
   }
 
   update(form:NgForm){
-    this.http.post<string>("Users/UpdateById",this.updateModel,(res)=>{
+    this.http.post<string>("User/UpdateById",this.updateModel,(res)=>{
       this.toast.callToast(res.data,'success');
       this.getAll();
       this.updateModelCloseBtn?.nativeElement.click();
