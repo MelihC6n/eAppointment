@@ -45,9 +45,9 @@ internal sealed class GetAllUsersQueryHandler(
                 }
             }
 
-            List<Guid> stringRoles = roles.Select(s => s.Id).ToList();
+            List<Guid> RoleIds = roles.Select(s => s.Id).ToList();
             List<string?> stringRoleNames = roles.Select(s => s.Name).ToList();
-            item.RoleIds = stringRoles;
+            item.RoleIds = RoleIds;
             item.RoleNames = stringRoleNames;
         }
         return response;
