@@ -27,7 +27,7 @@ internal sealed class LoginCommandHandler(
             return Result<LoginCommandResponse>.Failure("Wrong password!");
         }
 
-        string token = jwtProvider.CreateToken(user);
+        string token = await jwtProvider.CreateTokenAsync(user);
         LoginCommandResponse response = new(token);
 
         return Result<LoginCommandResponse>.Succeed(response);
